@@ -1,13 +1,28 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useToast } from 'vue-toast-notification'
+
+const $toast = useToast()
 
 const password = ref('')
 
-const passwordLength = ref(16)
+const passwordLength = ref(
+  window.localStorage.getItem('passwordLength')
+    ? parseInt(window.localStorage.getItem('passwordLength') as string)
+    : 16
+)
+
+const savePasswordLength = (event: Event) => {
+  const value = parseInt((event.target as HTMLInputElement).value)
+  passwordLength.value = value
+  window.localStorage.setItem('passwordLength', value.toString())
+}
 
 const CopyToClipboard = (text: string) => {
   if (!text.trim()) return
   navigator.clipboard.writeText(text)
+  $toast.clear()
+  $toast.success('Password copied to clipboard', { position: 'top' })
 }
 
 const GeneratePassword = () => {
@@ -21,27 +36,34 @@ const GeneratePassword = () => {
 
 <template>
   <main>
-    <h1>hello password</h1>
+    <h1>Random Generator</h1>
     <div>
-      <div>
+      <div class="options">
         <input type="checkbox" id="apple" />
         <label for="apple">Apple style</label>
       </div>
-      <div>
+      <div class="options">
         <input type="checkbox" id="symbols" />
         <label for="symbols">Symbols (#{[|-_°`\^@]}@!?*²)</label>
       </div>
-      <div>
+      <div class="options">
         <input type="checkbox" id="accent" />
         <label for="accent">Accent (éèàîïù)</label>
       </div>
-      <div>
-        <input v-model="passwordLength" type="number" id="passwordLength" />
-        <label for="passwordLength">Lenght</label>
+      <div class="options">
+        <input
+          :value="passwordLength"
+          @input="savePasswordLength"
+          type="range"
+          min="8"
+          max="32"
+          id="passwordLength"
+        />
+        <label for="passwordLength">Length : {{ passwordLength }}</label>
       </div>
     </div>
-    <input v-model="password" type="text" placeholder="Password" />
-    <div>
+    <input class="mainPassword" v-model="password" type="text" placeholder="Password" />
+    <div class="buttonGroup">
       <button @click="GeneratePassword">Generate</button>
       <button @click="CopyToClipboard(password)">Copy</button>
     </div>
@@ -50,19 +72,50 @@ const GeneratePassword = () => {
 
 <style scoped>
 main {
+  padding: 2em;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f2f2f2;
   color: black;
-  height: 200px;
-  width: 400px;
+  min-width: 400px;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.mainPassword {
+  height: 2em;
+  font-size: 16px;
+  width: 100%;
 }
 
 @media (max-width: 375px) {
   main {
-    width: 300px;
+    min-width: 300px;
+  }
+}
+
+.buttonGroup {
+  margin-top: 1em;
+  display: flex;
+  gap: 1em;
+}
+
+button {
+  background-color: hsla(160, 100%, 37%, 1);
+  color: white;
+  padding: 1em 2em;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  &:hover {
+    background-color: hsla(160, 100%, 27%, 1);
   }
 }
 </style>
