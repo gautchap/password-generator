@@ -11,6 +11,9 @@ importers:
       vue:
         specifier: ^3.4.21
         version: 3.4.23(typescript@5.4.5)
+      vue-toast-notification:
+        specifier: ^3.1.2
+        version: 3.1.2(vue@3.4.23(typescript@5.4.5))
     devDependencies:
       '@rushstack/eslint-patch':
         specifier: ^1.8.0
@@ -1095,6 +1098,12 @@ packages:
   vue-template-compiler@2.7.16:
     resolution: {integrity: sha512-AYbUWAJHLGGQM7+cNTELw+KsOG9nl2CnSv467WobS5Cv9uk3wFcnr1Etsz2sEIHEZvw1U+o9mRlEO6QbZvUPGQ==}
 
+  vue-toast-notification@3.1.2:
+    resolution: {integrity: sha512-oNRL/W9aaHoeScp+iTIW7k09vM16/+8aptp2maa+7qTB43JuxmAgKdXKFYtf+uvSNOYYq2BIWgLCeJ61pwom/A==}
+    engines: {node: '>=12.15.0'}
+    peerDependencies:
+      vue: ^3.0
+
   vue-tsc@2.0.14:
     resolution: {integrity: sha512-DgAO3U1cnCHOUO7yB35LENbkapeRsBZ7Ugq5hGz/QOHny0+1VQN8eSwSBjYbjLVPfvfw6EY7sNPjbuHHUhckcg==}
     hasBin: true
@@ -2112,6 +2121,10 @@ snapshots:
     dependencies:
       de-indent: 1.0.2
       he: 1.2.0
+
+  vue-toast-notification@3.1.2(vue@3.4.23(typescript@5.4.5)):
+    dependencies:
+      vue: 3.4.23(typescript@5.4.5)
 
   vue-tsc@2.0.14(typescript@5.4.5):
     dependencies:
