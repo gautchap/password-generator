@@ -27,10 +27,18 @@ const CopyToClipboard = (text: string) => {
 
 const GeneratePassword = () => {
   password.value = ''
-  const chars = '0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  window.crypto.getRandomValues(new Uint32Array(passwordLength.value)).forEach((number) => {
-    password.value += chars[number % chars.length]
-  })
+  let temp = ''
+  const regex = /(?=(.*\d){2})[!@#$%^&*(),.?":{}|<>\s](?=[A-Z])(?=(.*[a-z]){2,})/g
+  do {
+    temp = ''
+    const chars =
+      '0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*(),.?":{}|<>ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    window.crypto.getRandomValues(new Uint32Array(passwordLength.value)).forEach((number) => {
+      temp += chars[number % chars.length]
+    })
+  } while (temp.match(regex) === null)
+
+  password.value = temp
 }
 </script>
 
