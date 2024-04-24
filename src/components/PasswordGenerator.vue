@@ -8,12 +8,15 @@ const password = ref('')
 
 const passwordLength = ref(
   window.localStorage.getItem('passwordLength')
-    ? parseInt(window.localStorage.getItem('passwordLength') as string)
+    ? isNaN(Number(window.localStorage.getItem('passwordLength')))
+      ? 16
+      : Number(window.localStorage.getItem('passwordLength'))
     : 16
 )
 
 const savePasswordLength = (event: Event) => {
-  const value = parseInt((event.target as HTMLInputElement).value)
+  let value = Number((event.target as HTMLInputElement).value)
+  if (value < 7) return
   passwordLength.value = value
   window.localStorage.setItem('passwordLength', value.toString())
 }
@@ -28,11 +31,10 @@ const CopyToClipboard = (text: string) => {
 const GeneratePassword = () => {
   password.value = ''
   let temp = ''
-  const regex = /(?=(.*\d){2})[!@#$%^&*(),.?":{}|<>\s](?=[A-Z])(?=(.*[a-z]){2,})/g
+  const regex = /(?=(.*\d){2})[!@#$%^&*(),.?":{}|<>\s](?=[A-Z]{2,})(?=(.*[a-z]){2,})/g
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*(),.?":{}|<>ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   do {
     temp = ''
-    const chars =
-      '0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*(),.?":{}|<>ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     window.crypto.getRandomValues(new Uint32Array(passwordLength.value)).forEach((number) => {
       temp += chars[number % chars.length]
     })
